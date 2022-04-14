@@ -1,0 +1,46 @@
+1.redis 基线测试 
+  ./redis-cli --intrinsic-latency 100  -h 192.168.1.84
+   100 表示执行的秒数
+   输出结果：
+   Max latency so far: 1 microseconds.
+   Max latency so far: 6 microseconds.
+   Max latency so far: 21 microseconds.
+   Max latency so far: 56 microseconds.
+   Max latency so far: 79 microseconds.
+   Max latency so far: 82 microseconds.
+   Max latency so far: 105 microseconds.
+   Max latency so far: 133 microseconds.
+   Max latency so far: 154 microseconds.
+   Max latency so far: 187 microseconds.
+   Max latency so far: 210 microseconds.
+   Max latency so far: 247 microseconds.
+   Max latency so far: 376 microseconds.
+   Max latency so far: 388 microseconds.
+   Max latency so far: 1507 microseconds.
+   Max latency so far: 7142 microseconds.
+
+   3502231586 total runs (avg latency: 0.0286 microseconds / 28.55 nanoseconds per run).
+   Worst run took 250129x longer than the average latency.
+   结果说明：
+   最大延迟 7142 微秒，就是7毫秒， 所以基线性能为7毫秒
+
+2. 最大qps 测试
+   ./redis-benchmark -h 192.168.1.84 -c 1 -q
+   -c 表示同时多少个客户端请求， -c 1 表示只有一个客户端
+   -q 仅仅显示redis-benchmark的requests per second信息
+   -n 表示写入次数
+   结果：
+   PING_INLINE: 1709.17 requests per second, p50=0.439 msec
+   PING_MBULK: 1698.40 requests per second, p50=0.439 msec
+   SET: 1686.43 requests per second, p50=0.511 msec
+   GET: 1713.12 requests per second, p50=0.495 msec
+   INCR: 1745.02 requests per second, p50=0.495 msec
+   LPUSH: 1712.42 requests per second, p50=0.503 msec
+   RPUSH: 1725.71 requests per second, p50=0.487 msec
+   LPOP: 1702.30 requests per second, p50=0.439 msec
+   RPOP: 1702.74 requests per second, p50=0.423 msec
+   SADD: 1723.10 requests per second, p50=0.479 msec
+   HSET: 1715.09 requests per second, p50=0.487 msec
+   ^COP: rps=1692.0 (overall: 1714.1) avg_msec=0.583 (overall: 0.574)
+   结果基本认为每种数据的操作每秒1700左右
+   要详细的qps数据， 直接 ./redis-benchmark执行就行，默认会开50个客户端，执行所有类型的测试
